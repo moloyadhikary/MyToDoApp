@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{default}">
+<head>
+    <title>To Do APP :: Edit Task</title>
+</head>
+<body>
+<div class="row" layout:fragment="page_content" id="page_content">
+    <div class="col-sm-12 mt-4">
+        <div class="card">
+            <div class="card-header bg-success">
+                <h2>Edit Tasks: <span th:text="${model.task_name}" /></h2>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/task/editTaskPost}" th:object="${model}" method="post">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">Task For</span>
+                                </div>
+                                <input type="hidden" name="task_id" id="task_id" th:value="${model.task_id}">
+                                <select name="task_type" class="form-control" id="task_type">
+                                    <option th:each="taskType: ${taskTypes}" th:value="${taskType.task_type_id}"
+                                            th:text="${taskType.type_of_task}"></option>
+                                </select>
+                            </div>
+                            <br/>
+                            <button type="submit" class="btn btn-primary mb-2 text-right"><i
+                                    class="material-icons">save</i> Save Data
+                            </button>&nbsp;
+                            <a th:href="@{/}" type="button" class="btn btn-info mb-2 text-right">Back to Front <i
+                                    class="material-icons">forward</i></a>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-st_text">Task Name</span>
+                                </div>
+                                <input type="text" name="task_name" id="task_name" th:value="${model.task_name}" required class="form-control">
+                            </div>
+                            <textarea class="form-control" rows="8" name="task_description" id="task_description" placeholder="Task description" th:text="${model.task_description}"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<th:block layout:fragment="scripts">
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            /*<![CDATA[*/
+            var taskType = /*[[${model.task_type.task_type_id}]]*/ "1";
+            /*]]>*/
+            $("#task_type").val(taskType);
+        })
+    </script>
+</th:block>
+</html>
+
+

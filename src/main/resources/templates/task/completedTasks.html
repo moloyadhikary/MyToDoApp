@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{default}">
+<head>
+    <title>To Do APP :: Completed Tasks</title>
+</head>
+<body>
+<div class="row" layout:fragment="page_content" id="page_content">
+    <div class="col-sm-12 mt-4">
+        <div class="card">
+            <div class="card-header bg-success">
+                <div class="row">
+                    <div class="col-sm-10"><h2>Completed Tasks: <span th:text="${completedTasks.size()}" /></h2></div>
+                    <div class="col-sm-2 text-right"><a  th:href="@{/}" type="button" class="btn btn-sm"><i
+                            class="material-icons">add_box</i> Add New Tasks</a>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion" id="accordionExample">
+                <div class="card" th:each="task: ${completedTasks}">
+                    <div class="card-header" th:id="'heading' + ${task.task_id}">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                    th:data-target="'#collapse' + ${task.task_id}" aria-expanded="false"
+                                    aria-controls="collapseTwo">
+                                <b th:text="${task.task_name}"></b>
+                            </button>
+                        </h2>
+                    </div>
+                    <div th:id="'collapse' + ${task.task_id}" class="collapse" th:aria-labelledby="'heading' + ${task.task_id}"
+                         data-parent="#accordionExample">
+                        <ul class="list-group mb-3">
+                            <li class="list-group text-center" style="padding: .35rem 1.25rem; font-weight: bold">
+                                <span th:text="'Added On: ' + ${#temporals.format(task.added_date, 'MMM dd, yyyy hh:mm a')}"></span>
+                                <span th:text="'Completed On: ' + ${#temporals.format(task.completed_date, 'MMM dd, yyyy hh:mm a')}"></span>
+                                <p style="color: #5b1f3f" data-th-utext="${#strings.replace(#strings.escapeXml(task.task_description),'&#10;','&lt;br&gt;')}"></p>
+                            </li>
+                        <th:block th:each="subTask: ${task.subTasks}">
+                            <li th:switch="${subTask.st_status}"  class="list-group-item" style="padding: .35rem 1.25rem;">
+                            <span style="font-weight: bold" th:case="'Done'"><strike><literal th:text="|${subTaskStat.index + 1}. ${subTask.st_text}|" /></strike> (<literal th:text="${subTask.st_status}" />)</span>
+                            <span style="color: darkgreen; font-weight: bold" th:case="'Started'"><literal th:text="|${subTaskStat.index + 1}. ${subTask.st_text}|" /> (<literal th:text="${subTask.st_status}" />)</span>
+                            <span style="color: darkblue; font-weight: bold" th:case="*"><literal th:text="|${subTaskStat.index + 1}. ${subTask.st_text}|" /> (<literal th:text="${subTask.st_status}" />)</span>
+
+                                <br/>
+                                <span th:text="'Added On: ' + ${#temporals.format(subTask.st_added_date, 'MMM dd, yyyy hh:mm a')}"></span><br/>
+                                <p data-th-utext="${#strings.replace(#strings.escapeXml(subTask.st_description),'&#10;','&lt;br&gt;')}"></p>
+                            </li>
+                        </th:block>
+                        </ul>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<th:block layout:fragment="scripts">
+</th:block>
+</html>
+
+

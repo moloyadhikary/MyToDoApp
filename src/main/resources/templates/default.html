@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Moloy's To Do App</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" th:href="@{/style.css}" />
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}" />
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
+
+    <link rel="shortcut icon" th:href="@{/icons/favicon.ico}" />
+</head>
+
+<body>
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand text-center" th:href="@{/}">Moloy's To Do Application</a>
+    <!-- Navbar content -->
+</nav>
+<div class="container-fluid">
+    <div class="row" layout:fragment="page_content" style="padding-left: 20px; padding-right: 20px;">
+    </div>
+</div>
+<th:block layout:fragment="scripts"></th:block>
+
+<!-- Footer -->
+<footer class="footer mt-2">
+    <div class="card">
+        <div class="card-header bg-info text-center bg-dark text-white" style="padding: .25rem 1.25rem">
+            <p style="margin-bottom: 0rem">Developed using Java(1.8),  Spring Boot(2.2.0), JPA(2.2.0), Hibernate(5.4.6.Final), Thymleaf(3.0.11)</p>
+            <h3 style="margin-bottom: 0rem !important">Developed by Moloy Adhikary &copy;</h3>
+        </div>
+    </div>
+</footer>
+<!-- Footer -->
+</body>
+</html>

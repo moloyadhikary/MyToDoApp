@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{default}">
+<head>
+    <title>To Do APP :: Index</title>
+</head>
+<body>
+<div class="row" layout:fragment="page_content" id="page_content">
+    <div class="col-sm-12 mt-4">
+        <div class="card">
+            <div class="card-header bg-success">
+                <h2>Add To Do Item</h2>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/task/addNewTask}" th:object="${entryModel}" method="post">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">Task For</span>
+                                </div>
+                                <select name="task_type" class="form-control" id="task_type">
+                                    <option th:each="taskType: ${taskTypes}" th:value="${taskType.task_type_id}"
+                                            th:text="${taskType.type_of_task}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control mb-2 mr-sm-2" name="task_name" id="task_name"
+                                   placeholder="type here..." required>
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-primary mb-2"><i class="material-icons">save</i>
+                                Save Task
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 mt-3">
+        <div class="card">
+            <div class="card-header bg-info">
+                <div class="row">
+                    <div class="col-sm-8"><h2>Things to do: <span th:text="${taskList.size()}"/></h2></div>
+                    <div class="col-sm-2 text-right">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="">Of Type</span>
+                            </div>
+                            <select name="task_type_filter" class="form-control" id="task_type_filter">
+                                <option value="0">All Tasks</option>
+                                <option th:each="taskType: ${taskTypes}" th:value="${taskType.task_type_id}"
+                                        th:text="${taskType.type_of_task}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 text-right"><a th:href="@{/task/completedTasks}" type="button"
+                                                        class="btn btn-success"><i
+                            class="material-icons">done_all</i> Completed Tasks</a></div>
+                </div>
+            </div>
+            <ul class="list-group" th:each="task: ${taskList}">
+                <li class="list-group-item" aria-disabled="true" style="font-weight: bold;"><span
+                        style="color: brown;  font-size: 24px;"
+                        th:text="|${task.task_name} (${task.task_type.type_of_task})|"/>
+                    <div class="float-right">
+                        <div class="progress mb-2">
+                            <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25"
+                                 aria-valuemin="0" aria-valuemax="100">25%
+                            </div>
+                        </div>
+                        <a href="#" th:data-id="${task.task_id}" title="Task Details"
+                           class="btn btn-sm btn-info taskDetailsModalOpener"><i
+                                class="material-icons">info</i></a>
+                        <a href="#" class="btn btn-sm btn-info"><i class="material-icons">format_list_numbered</i> <span
+                                th:text="${task.subTasks.size()}" style="font-weight: bold"/></a>
+                        <a href="#" th:data-id="${task.task_id}" title="Add Sub Task"
+                           class="btn btn-sm btn-success addSubTaskModalOpener"><i
+                                class="material-icons">add_box</i></a>
+                        <a th:href="@{'/task/editTask/' + ${task.task_id}}" title="Edit Task"
+                           class="btn btn-sm btn-primary"><i class="material-icons">edit</i></a>
+                        <a th:href="@{'/task/taskCompleted/' + ${task.task_id}}" title="Completed"
+                           onclick="return confirm('This task will not be available for further edit!')"
+                           class="btn btn-sm btn-success"><i class="material-icons">done</i></a>
+                    </div>
+                    <br>
+                    <ul class="list-group mb-3">
+                        <br>
+                        <th:block th:each="subTask : ${task.subTasks}">
+                            <li th:switch="${subTask.st_status}" class="list-group-item"
+                                style="padding: .35rem 1.25rem;">
+                                <span th:case="'Done'"><strike><literal
+                                        th:text="|${subTaskStat.index + 1}. ${subTask.st_text} (${subTask.st_status})|"></literal></strike></span>
+                                <span th:case="'Started'">
+                                        <span style="color: darkgreen;"
+                                              th:text="|${subTaskStat.index + 1}. ${subTask.st_text} (${subTask.st_status})|"></span>
+                                        <a th:href="@{'/subTask/editSubTask/' + ${subTask.id}}" title="Edit"><i
+                                                class="material-icons">edit</i></a>
+                                        <a th:href="@{'/subTask/deleteSubTask/' + ${subTask.id}}" title="Delete"
+                                           onclick="return confirm('Are you sure?')"><i
+                                                class="material-icons">delete</i></a>
+                                    </span>
+                                <span th:case="*">
+                                        <span style="color: darkblue;"
+                                              th:text="|${subTaskStat.index + 1}. ${subTask.st_text} (${subTask.st_status})|"></span>
+                                            <a th:href="@{'/subTask/editSubTask/' + ${subTask.id}}" title="Edit"><i
+                                                    class="material-icons">edit</i></a>
+                                        <a th:href="@{'/subTask/deleteSubTask/' + ${subTask.id}}" title="Delete"
+                                           onclick="return confirm('Are you sure?')"><i
+                                                class="material-icons">delete</i></a>
+                                    </span>
+                            </li>
+                        </th:block>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="addSubTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <form th:action="@{/subTask/addNewSubTask}" method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add New Sub Task</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="hidden" id="mainTaskId" name="mainTaskId">
+                            <input type="text" class="form-control" id="subTaskText" name="subTaskText"
+                                   placeholder="type here..." required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary"><i class="material-icons">save</i>Save Sub Task
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<th:block layout:fragment="scripts">
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $(".addSubTaskModalOpener").on("click", function () {
+                var taskId = $(this).data('id');
+                $("#mainTaskId").val(taskId);
+                $('#addSubTaskModal').modal('show');
+            });
+
+            $(".taskDetailsModalOpener").on("click", function () {
+                alert("Coming soon!");
+            });
+
+            $("#task_type_filter").on("change", function () {
+                var taskId = $(this).val();
+                if (taskId == 0) {
+                    window.location.replace('/MyToDoApp/');
+                    // $(location).attr('href', getAbsoluteUrl('/'));
+                } else {
+                    window.location.replace('/MyToDoApp/home/index/' + taskId);
+                    //$(location).attr('href', getAbsoluteUrl('/home/index/' + taskId));
+                }
+            });
+
+            var getAbsoluteUrl = (function() {
+                var a;
+                return function(url) {
+                    if(!a) a = document.createElement('a');
+                    a.href = url;
+                    return a.href;
+                }
+            })();
+        });
+    </script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $("#task_type_filter").val([[${selectedTask}]]);
+        })
+    </script>
+</th:block>
+</html>
+
+

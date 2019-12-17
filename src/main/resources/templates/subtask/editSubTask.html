@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{default}">
+<head>
+    <title>To Do APP :: Edit Sub Task</title>
+</head>
+<body>
+<div class="row" layout:fragment="page_content" id="page_content">
+    <div class="col-sm-12 mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h2>Edit Sub Task: <font color="green"><th:block th:text="${model.st_text}"></th:block></font></h2>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/subTask/editSubTaskPost}" th:object="${model}" method="post">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">Status</span>
+                                </div>
+                                <input type="hidden" name="id" id="id" th:value="${model.id}">
+                                <select name="st_status" id="st_status" class="form-control col-sm-6 text-center">
+                                    <option value="Raised">Raised</option>
+                                    <option value="Started">Started</option>
+                                    <option value="Done">Done</option>
+                                </select>
+                            </div>
+                            <br/>
+                            <button type="submit" class="btn btn-primary mb-2 text-right"><i
+                                    class="material-icons">save</i> Save Data
+                            </button>&nbsp;
+                            <a th:href="@{/}" type="button" class="btn btn-info mb-2 text-right">Back to Front <i
+                                    class="material-icons">forward</i></a>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-st_text">Sub Task Name</span>
+                                </div>
+                                <input type="text" name="st_text" id="st_text" th:value="${model.st_text}" required class="form-control">
+                            </div>
+                            <textarea class="form-control" rows="8" name="st_description" id="st_description" placeholder="Sub task note" th:text="${model.st_description}"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<th:block layout:fragment="scripts">
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            /*<![CDATA[*/
+            var message = /*[[${model.st_status}]]*/ "Raised";
+            /*]]>*/
+            $("#st_status").val(message);
+        })
+    </script>
+</th:block>
+</html>
+
+
