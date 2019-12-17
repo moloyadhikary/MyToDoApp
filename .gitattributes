@@ -1,3 +1,5 @@
 # Example of a `.gitattributes` file which reclassifies `.rb` files as Java:
-*.rb linguist-language=Java
-*.glyphs linguist-language=OpenStep-Property-List
+* linguist-language=Java
+platforms/* linguist-vendored=true
+plugins/* linguist-vendored=true
+public/* linguist-vendored=true
